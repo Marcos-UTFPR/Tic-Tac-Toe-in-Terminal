@@ -30,6 +30,10 @@ BOLD = '\033[1m'
 UNDERLINE = '\033[4m'
 END = '\033[0m'
 
+# Possíveis respostas
+POSITIVE = ("s","y","yes","sim")
+NEGATIVE = ("n","não","no")
+
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
 # Exceções -------------------------------------------------------------------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -54,6 +58,9 @@ def typewriterPrint(message): # Um print lento com efeito de "máquina de escrev
         sys.stdout.flush()
         time.sleep(0.1)
     print('\n', end='') # Pulando linha
+
+def clear(): # Limpa o terminal
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
 # Outros ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -327,6 +334,9 @@ class game():
     def round(self):
         # OBS: Informar valores errados faz com que o jogador atual perca o Round e a contagem do duration das células avance
         try:
+            print("\n===================================================================================\n"
+          "=================================== Tic Tac Toe ===================================\n"
+          "===================================================================================")
             print(f"\n -Jogador atual: {self.current_player}")
             newLine = int(input("Informe uma linha:"))    # De 1 a 3
             newCell = int(input("Informe uma célula:"))-1 # De 1 a 3 (mas 0 a 2 no código)
@@ -383,23 +393,27 @@ class game():
 # ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 def main(): # Função principal
-    os.system('cls' if os.name == 'nt' else 'clear') # Limpa o terminal
+    clear() # Limpa o terminal
     # ---------------------------------------
     gameMain = game()
     # ---------------------------------------
     global reset
-    reset = input("\nReset ativado? (S/N)") # Flag que decide se vai haver reset das células com o passar das rodadas ou não
+    print("===================================================================================\n"
+          "=================================== Tic Tac Toe ===================================\n"
+          "===================================================================================")
+    reset = input("\n\t-Reset ativado? (S/N)") # Flag que decide se vai haver reset das células com o passar das rodadas ou não
     # Loop para pegar o valor da flag
     while True:
-        if reset == "S" or reset == "s":
+        if reset.lower() in POSITIVE:
             reset = True
             break
-        elif reset == "N" or reset == "n":
+        elif reset.lower() in NEGATIVE:
             reset = False
             break
         else:
-            reset = input(YELLOW+"S ou N?"+END)
+            reset = input("\t"+YELLOW+"S ou N?"+END)
             continue
+    print("\n",end="")
     # ---------------------------------------
     # Loop do game
     gameMain.print()
